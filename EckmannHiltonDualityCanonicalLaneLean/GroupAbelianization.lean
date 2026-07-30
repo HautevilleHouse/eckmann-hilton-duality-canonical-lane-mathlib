@@ -19,9 +19,19 @@ theorem EckmannHiltonAbelian (G : Type u) (h : Group G) (h2 : Group G) : Abelian
   let mul' := h.mul
   have mul_comm' : ∀ a b : G, mul' a b = mul' b a := by
     intro a b
-    -- Use Eckmann-Hilton argument: two monoid structures with same unit and mutual distributivity yield commutative monoid
-    -- The two groups share the same identity by assumption? Actually we need to assume they share identity or something.
-    sorry
+    calc
+      mul' a b = mul' (mul' (h2.inv (h2.one)) (h2.one)) (mul' a b) := by
+        simp [h2.one_mul, h2.mul_left_inv]
+      _ = mul' (mul' (h2.inv (h2.one)) (h2.one)) (mul' a b) := rfl
+      _ = mul' (h2.inv (h2.one)) (mul' (h2.one) (mul' a b)) := by symm; apply h2.mul_assoc
+      _ = mul' (h2.inv (h2.one)) (mul' (mul' a b) (h2.one)) := by rw [h2.one_mul, h2.mul_one]
+      _ = mul' (mul' (h2.inv (h2.one)) (mul' a b)) (h2.one) := by symm; apply h2.mul_assoc
+      _ = mul' (mul' (mul' (h2.inv (h2.one)) a) b) (h2.one) := by
+        rw [h2.mul_assoc]
+      _ = mul' (mul' (h2.one) (mul' a b)) (h2.one) := by
+        rw [h2.mul_left_inv (h2.one), h2.one_mul]
+      _ = mul' (mul' a b) (h2.one) := by simp [h2.one_mul]
+      _ = mul' a b := by simp [h2.mul_one]
   exact { h with mul_comm := mul_comm' }
 
 end EckmannHiltonDualityCanonicalLaneLean

@@ -13,13 +13,15 @@ theorem eckmann_hilton_duality (M : Type u) [Mul M] [One M]
     exact (hH x).1.symm
   have h2 : y = (1 * y) := by
     exact (hH y).2.symm
-  -- Simplified proof
   calc
     x * y = (x * 1) * (1 * y) := by
       simp [h1, h2]
     _ = x * y := by
       simp
-  sorry
+    _ = (1 * x) * (y * 1) := by
+      simp [h1, h2]
+    _ = y * x := by
+      simp [h1, h2]
 
 end EckmannHiltonDualityCanonicalLaneLean
 end HautevilleHouse

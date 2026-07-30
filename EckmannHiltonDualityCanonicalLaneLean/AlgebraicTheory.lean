@@ -45,21 +45,16 @@ theorem eckmann_hilton_commutative' {A : Type} (eh : EHPair A) : ∀ a b : A, eh
         simp [eh.starUnitLeft, eh.starUnitRight]
       _ = eh.star b a := by rw [h]
       _ = eh.star a b := by
-        -- using the earlier equality to get commutativity of star
         calc
           eh.star b a = eh.circle b a := by rw [h]
-          _ = eh.circle a b := by
-            -- we already have the reverse direction, but we need to show it's symmetric
-            -- from the previous step we have eh.circle a b = eh.circle b a, so we can use that
-            have := (calc
-              eh.circle a b = eh.star a b := by rw [h]
-              _ = eh.star (eh.circle eh.unitCircle a) (eh.circle b eh.unitCircle) := by
-                simp [eh.circleUnitLeft, eh.circleUnitRight]
-              _ = eh.circle (eh.star eh.unitCircle b) (eh.star a eh.unitCircle) := by
-                simpa using eh.interchange eh.unitCircle a b eh.unitCircle
-              _ = eh.circle b a := by
-                simp [eh.starUnitLeft, eh.starUnitRight])
-            exact this.symm
+          _ = eh.circle a b := (calc
+            eh.circle a b = eh.star a b := by rw [h]
+            _ = eh.star (eh.circle eh.unitCircle a) (eh.circle b eh.unitCircle) := by
+              simp [eh.circleUnitLeft, eh.circleUnitRight]
+            _ = eh.circle (eh.star eh.unitCircle b) (eh.star a eh.unitCircle) := by
+              simpa using eh.interchange eh.unitCircle a b eh.unitCircle
+            _ = eh.circle b a := by
+              simp [eh.starUnitLeft, eh.starUnitRight]).symm
         _ = eh.circle b a := rfl
       _ = eh.star b a := by rw [h]
   calc
